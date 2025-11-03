@@ -55,33 +55,34 @@ resource "aws_s3_object" "error" {
 resource "aws_security_group" "web_sg" {
   name        = "web-sg"
   description = "Allow SSH and HTTP"
-  ingress = [
-    {
-      description = "SSH"
-      from_port   = 22
-      to_port     = 22
-      protocol    = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
-    },
-    {
-      description = "HTTP"
-      from_port   = 80
-      to_port     = 80
-      protocol    = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
-    }
-  ]
-  egress = [{
+
+  ingress {
+    description = "SSH"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "HTTP"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
-  }]
+  }
 }
 
 resource "aws_instance" "web_server" {
-  ami           = "ami-0c55b159cbfafe1f0"
-  instance_type = "t2.micro"
+  ami           = "ami-0bdd88bd06d16ba03"
+  instance_type = "t3.micro"
   key_name      = "terraform-key"   # Create this in AWS Console
   vpc_security_group_ids = [aws_security_group.web_sg.id]
 
